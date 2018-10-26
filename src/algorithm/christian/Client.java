@@ -7,7 +7,6 @@ package algorithm.christian;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,22 +23,33 @@ public class Client {
             Socket client = new Socket("localhost", 12345);
             DataInputStream in = new DataInputStream(client.getInputStream());
             DataOutputStream out = new DataOutputStream(client.getOutputStream());
+            
+            String hora = "16:00:00";
             String msg = "Qual é o tempo?";
-            
-            long t1 = System.currentTimeMillis();
+            long t0 = System.currentTimeMillis();
+            System.out.println("Requisitando");
             out.writeUTF(msg);
-//            long t2 = in.readInt();
             long serverTime = in.readLong();
-//            long t3 = serverTime;
             Random rand= new Random();
-            Thread.sleep(rand.nextInt(10000));
-            long t4 = System.currentTimeMillis();
+            Thread.sleep(rand.nextInt(4000));
+            long t1 = System.currentTimeMillis();
+            System.out.println("Respondido");
+            long diff = t1 - t0;
+            long time = serverTime + (diff/2);
+           
+            DateFormat formatHora = new SimpleDateFormat("HH:mm:ss:SSS Z");
+            String send = formatHora.format(new Date(t0));
+            String servidor = formatHora.format(new Date(serverTime));
+            String recive = formatHora.format(new Date(t1));
+            String nova = formatHora.format(new Date(time));
             
-            long time = serverTime + (t4 - t1)/2;
-            DateFormat simDate = new SimpleDateFormat("dd MMM yyyy HH:mm:ss:SSS");
-            Date result = new Date(time); 
-            System.out.println(new Date(t1) + "\n" + new Date(t4) + "\n" + simDate.format(result) + "\n");
-//            System.out.println("Date of server: " + currentDate.toString());
+            DateFormat formatMin = new SimpleDateFormat("mm:ss:SSS Z");
+            System.out.println("Hora de requisiçãp: "+ send);
+            System.out.println("Hora de resposta: " + recive);
+            System.out.println("Hora do servidor: "+ servidor);
+            System.out.println("Hora do algoritmo: " + nova);
+            System.out.println("Diferença de tempo: " + formatMin.format(new Date(diff)));
+
             in.close();
             System.out.println("Connect finally!");
         }catch(Exception e) {

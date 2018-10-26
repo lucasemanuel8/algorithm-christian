@@ -20,21 +20,16 @@ public class Server {
     public static void main(String[] args) throws IOException {
         try {
             ServerSocket server = new ServerSocket(12345);
-            System.out.println("Server Lister a port 12345");
-
+            System.out.println("Servidor na porta 12345");
             while(true){
                 Socket client = server.accept();    
-//                System.out.println("Addr client: " + client.getInetAddress().getHostAddress());
                 DataInputStream in = new DataInputStream(client.getInputStream());
                 System.out.println(in.readUTF());
                 DataOutputStream out = new DataOutputStream(client.getOutputStream());
-                out.writeLong(System.currentTimeMillis());
                 Random rand= new Random();
-                Thread.sleep(rand.nextInt(1000));
-//                DataInputStream dis = new DataInputStream(client.getInputStream()); 
-//                String aff = dis.readUTF();
+                Thread.sleep(rand.nextInt(4000));
+                out.writeLong(System.currentTimeMillis());
                 out.flush();
-                out.writeInt((int)System.currentTimeMillis());
                 out.close();
                 client.close();
             }
